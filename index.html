@@ -239,5 +239,79 @@ window.calcStaff=function(){let total=num('heads')*num('hours')*num('wage')*(1+n
 renderDeals();
 })();
 </script>
+<style>
+#concierge{display:block;background:#101c30;color:#fff;border:1px solid #344860;border-radius:16px;padding:16px;margin:20px 0}
+#concierge .cc-card{background:#1b2940;border-radius:12px;padding:14px;margin:12px 0}
+#concierge textarea{width:100%;min-height:110px;padding:12px;background:#0b1220;color:white;border:1px solid #64748b;border-radius:9px;font:inherit}
+#concierge button{margin:5px 5px 5px 0}
+#concierge .cc-note{font-size:12px;color:#aebbd0}
+#concierge .cc-entry{border-top:1px solid #455672;padding:12px 0}
+#concierge .cc-entry p{white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
+<div id="concierge">
+<h2>Chief — Business Concierge</h2>
+<p>Tell Chief your vision. Build a plan before filling out paperwork.</p>
+<div class="cc-card">
+<b>Chief — Empire Business Director</b>
+<p>What are we working toward today? Describe the opportunity or business you want to build.</p>
+<label for="ccRequest">Your request</label>
+<textarea id="ccRequest" placeholder="Example: Find overlooked government and private contracts with low startup costs. Show me how to qualify, bid, hire workers, and make a profit."></textarea>
+<button onclick="ccSave()">Save Request</button>
+<button onclick="ccClear()">Clear Draft</button>
+<p class="cc-note">Requests are stored in this browser. This version does not send messages to an AI service.</p>
+</div>
+<div class="cc-card">
+<h3>Mission History</h3>
+<div id="ccHistory"></div>
+</div>
+<div class="cc-card">
+<h3>Chief's Planning Framework</h3>
+<p>1. Understand your business objective and constraints.</p>
+<p>2. Identify what can be researched without interrupting you.</p>
+<p>3. Find opportunities and verify official sources.</p>
+<p>4. Evaluate eligibility, startup costs, profit, and risks.</p>
+<p>5. Develop a bidding and staffing roadmap.</p>
+<p>6. Present recommendations for your approval.</p>
+<p class="cc-note">These are planned worker steps, not completed research.</p>
+</div>
+</div>
+<script>
+(function(){
+const key='empireConciergeV1';
+let requests=JSON.parse(localStorage.getItem(key)||'[]');
+let editing=-1;
+const input=document.getElementById('ccRequest');
+const history=document.getElementById('ccHistory');
+function persist(){localStorage.setItem(key,JSON.stringify(requests));render()}
+window.ccClear=function(){editing=-1;input.value=''};
+window.ccSave=function(){
+const value=input.value.trim();
+if(!value)return alert('Describe your request first.');
+if(editing===-1)requests.push({text:value,created:new Date().toISOString(),updated:new Date().toISOString()});
+else {requests[editing].text=value;requests[editing].updated=new Date().toISOString()}
+persist();ccClear();
+};
+window.ccEdit=function(i){
+editing=i;input.value=requests[i].text;input.focus();input.scrollIntoView({behavior:'smooth'});
+};
+window.ccDelete=function(i){
+if(!confirm('Delete this saved request?'))return;
+requests.splice(i,1);persist();ccClear();
+};
+function render(){
+history.replaceChildren();
+if(!requests.length){let p=document.createElement('p');p.textContent='No saved requests yet.';history.append(p)}
+requests.forEach((r,i)=>{
+let row=document.createElement('div');row.className='cc-entry';
+let p=document.createElement('p');p.textContent=r.text;
+let meta=document.createElement('p');meta.className='cc-note';meta.textContent='Updated: '+new Date(r.updated).toLocaleString();
+let edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>ccEdit(i);
+let del=document.createElement('button');del.textContent='Delete';del.onclick=()=>ccDelete(i);
+row.append(p,meta,edit,del);history.append(row);
+});
+}
+render();
+})();
+</script>
 </body>
 </html>
