@@ -127,5 +127,117 @@ tasks=[];trends=[];save();render();
 }
 render();
 </script>
+<style>
+#contracts{display:block}
+#contracts .contract-panel{background:#1b2940;border:1px solid #344860;border-radius:14px;padding:15px;margin:12px 0}
+#contracts label{display:block;margin-top:10px;font-size:13px;color:#c9d5e5}
+#contracts input,#contracts textarea,#contracts select{width:100%;padding:11px;margin:6px 0;background:#0b1220;color:white;border:1px solid #64748b;border-radius:8px;font:inherit}
+#contracts textarea{min-height:72px}
+#contracts button{margin:5px 5px 5px 0}
+#contracts .contract-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#contracts .contract-stats div{background:#101e32;border-radius:9px;padding:12px}
+#contracts small{color:#a8b7ca}
+</style>
+<div id="contracts" class="contract-panel" style="margin-top:30px">
+<h2>Contract Acquisition Division</h2>
+<p>Nationwide opportunity intelligence • Manual research workspace</p>
+<div class="contract-panel">
+<h3>Opportunity Radar</h3>
+<p><a href="https://sam.gov/opportunities" target="_blank" rel="noopener" style="color:#efc576">Search federal contracts — SAM.gov</a></p>
+<p><a href="https://legacy.sba.gov/federal-contracting/contracting-guide/prime-subcontracting/subcontracting-opportunities" target="_blank" rel="noopener" style="color:#efc576">Search subcontracting — SBA SUBNet</a></p>
+<p><a href="https://www.sba.gov/counseling/how-to-win-contracts/" target="_blank" rel="noopener" style="color:#efc576">Learn bidding requirements — SBA</a></p>
+<small>These links open official sources. Results are not automatically imported.</small>
+</div>
+<div class="contract-panel">
+<h3>New / Edit Opportunity</h3>
+<input id="dealTitle" placeholder="Contract title or business opportunity">
+<input id="dealBuyer" placeholder="Buyer / agency / prime contractor">
+<input id="dealLocation" placeholder="Location or nationwide">
+<input id="dealUrl" placeholder="Official opportunity URL">
+<label>Bid deadline</label><input id="dealDeadline" type="date">
+<label>Acquisition route</label>
+<select id="dealRoute"><option>Prime contract</option><option>Subcontract</option><option>Private commercial deal</option></select>
+<label>Stage</label>
+<select id="dealStage"><option>Discovered</option><option>Evaluating</option><option>Preparing bid</option><option>Submitted</option><option>Awarded</option><option>Staffing</option><option>Operating</option></select>
+<textarea id="dealNotes" placeholder="Eligibility, licensing, insurance, startup capital, risks, next steps"></textarea>
+<button onclick="saveDeal()">Save Opportunity</button>
+<button onclick="resetDeal()">New / Clear</button>
+<div id="dealList"></div>
+</div>
+<div class="contract-panel">
+<h3>Profitability Calculator</h3>
+<label>Estimated total contract revenue ($)</label><input id="rev" type="number" min="0" placeholder="0">
+<label>Labor and subcontracting ($)</label><input id="labor" type="number" min="0" placeholder="0">
+<label>Materials, equipment, insurance ($)</label><input id="materials" type="number" min="0" placeholder="0">
+<label>Other expenses, financing and contingency ($)</label><input id="other" type="number" min="0" placeholder="0">
+<button onclick="calcDeal()">Calculate</button>
+<div class="contract-stats">
+<div><small>Estimated operating profit</small><h3 id="profit">$0</h3></div>
+<div><small>Estimated margin</small><h3 id="margin">0%</h3></div>
+</div>
+<small>Planning estimates only; account for taxes, payment delays, and additional risks.</small>
+</div>
+<div class="contract-panel">
+<h3>Staffing Planner</h3>
+<label>Workers required</label><input id="heads" type="number" min="0" placeholder="0">
+<label>Hours per worker</label><input id="hours" type="number" min="0" placeholder="0">
+<label>Hourly wage ($)</label><input id="wage" type="number" min="0" placeholder="0">
+<label>Payroll burden and benefits (%)</label><input id="burden" type="number" min="0" value="20">
+<button onclick="calcStaff()">Estimate Staffing Cost</button>
+<p id="staffResult"></p>
+</div>
+<div class="contract-panel">
+<h3>Bid-to-Business Roadmap</h3>
+<ol>
+<li>Verify the original solicitation and deadline</li>
+<li>Check eligibility, registration, licenses and insurance</li>
+<li>Confirm performance requirements and payment terms</li>
+<li>Price labor, supplies, subcontractors and contingency</li>
+<li>Prepare the required bid documents</li>
+<li>Review and approve before submission</li>
+<li>Confirm award and contract execution</li>
+<li>Recruit or engage qualified workers</li>
+<li>Deliver, document and invoice the work</li>
+</ol>
+<p><small>Worker hiring and bid submission require owner approval.</small></p>
+</div>
+</div>
+<script>
+(function(){
+let deals=JSON.parse(localStorage.getItem('empireDealsV1')||'[]');
+let editing=-1;
+const $=id=>document.getElementById(id);
+const fields=['Title','Buyer','Location','Url','Deadline','Route','Stage','Notes'];
+function readForm(){let d={};fields.forEach(k=>d[k.toLowerCase()]=$('deal'+k).value);return d}
+function writeForm(d){fields.forEach(k=>$('deal'+k).value=d[k.toLowerCase()]||'')}
+function persist(){localStorage.setItem('empireDealsV1',JSON.stringify(deals));renderDeals()}
+window.resetDeal=function(){editing=-1;writeForm({})};
+window.saveDeal=function(){
+let d=readForm();if(!d.title.trim())return alert('Enter a title');
+if(editing<0)deals.push(d);else deals[editing]=d;
+persist();resetDeal();
+};
+window.editDeal=function(i){editing=i;writeForm(deals[i]);$('dealTitle').scrollIntoView({behavior:'smooth'})};
+window.deleteDeal=function(i){if(confirm('Delete this opportunity?')){deals.splice(i,1);persist();resetDeal()}};
+function renderDeals(){
+let root=$('dealList');root.replaceChildren();
+deals.forEach((d,i)=>{
+let box=document.createElement('div');box.style='border-top:1px solid #52617a;padding:12px 0';
+let title=document.createElement('b');title.textContent=d.title;
+let details=document.createElement('p');details.textContent=[d.buyer,d.location,d.stage,d.deadline].filter(Boolean).join(' • ');
+let edit=document.createElement('button');edit.textContent='Edit';edit.onclick=()=>editDeal(i);
+let del=document.createElement('button');del.textContent='Delete';del.onclick=()=>deleteDeal(i);
+box.append(title,details);
+if(/^https:\/\//i.test(d.url)){let link=document.createElement('a');link.href=d.url;link.target='_blank';link.rel='noopener';link.textContent='Official source';link.style='color:#efc576;display:block;margin-bottom:8px';box.append(link)}
+box.append(edit,del);root.append(box);
+});
+}
+const num=id=>Math.max(0,Number($(id).value)||0);
+const money=n=>n.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2});
+window.calcDeal=function(){let revenue=num('rev'),cost=num('labor')+num('materials')+num('other'),profit=revenue-cost;$('profit').textContent=money(profit);$('margin').textContent=revenue?(100*profit/revenue).toFixed(1)+'%':'N/A'};
+window.calcStaff=function(){let total=num('heads')*num('hours')*num('wage')*(1+num('burden')/100);$('staffResult').textContent='Estimated loaded labor cost: '+money(total)};
+renderDeals();
+})();
+</script>
 </body>
 </html>
