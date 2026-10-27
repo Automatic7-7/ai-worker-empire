@@ -2,22 +2,130 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Worker Empire</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Worker Empire | Empire OS</title>
 <style>
-body {background:#0b1220;color:white;font-family:Arial,sans-serif;padding:20px;}
-h1 {color:#e8bd68;}
-.card {background:#1e293b;padding:20px;margin:12px 0;border-radius:12px;}
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#0b1220;color:#f3f5fa;font:15px Arial,sans-serif}
+h1{color:#efc576;font-size:27px;margin:8px 0}
+h2{font-size:20px}
+p{color:#b5c2d5}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tag{font-size:11px;background:#173d36;color:#9de8c9;padding:9px;border-radius:20px}
+nav{display:flex;overflow-x:auto;gap:8px;padding:18px 0}
+button{background:#263b58;color:#fff;border:1px solid #536680;border-radius:9px;padding:12px;cursor:pointer}
+nav button{white-space:nowrap}
+.card{background:#1b2940;border:1px solid #344860;border-radius:14px;padding:16px;margin:12px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.worker{background:#101e32;border-radius:10px;padding:12px}
+.small{font-size:12px;color:#a8b7ca}
+.gold{background:#c89a48;color:#0b1220;font-weight:bold}
+.red{background:#963444}
+input{width:100%;padding:13px;background:#0b1220;border:1px solid #64748b;color:white;border-radius:8px;margin:8px 0}
+section{display:none}
+section.active{display:block}
+.item{padding:12px 0;border-bottom:1px solid #344860}
+.good{color:#8de0b8}
 </style>
 </head>
 <body>
-<h1>AI Worker Empire</h1>
-<p>Welcome to Empire OS Headquarters</p>
-<div class="card">CREW Station</div>
-<div class="card">Trend Intelligence</div>
-<div class="card">Trading Lab</div>
-<div class="card">Publishing House</div>
-<div class="card">Motion Studios</div>
-<p>Empire OS Foundation is online.</p>
+<header>
+<div><small>EMPIRE OS / HEADQUARTERS</small><h1>AI Worker Empire</h1></div>
+<span class="tag" id="status">DEMO MODE</span>
+</header>
+<p>Your digital business headquarters</p>
+<nav>
+<button onclick="show('crew')">CREW</button>
+<button onclick="show('tasks')">MISSIONS</button>
+<button onclick="show('trends')">TRENDS</button>
+<button onclick="show('business')">DIVISIONS</button>
+<button onclick="show('memory')">MEMORY</button>
+</nav>
+<section id="crew" class="active">
+<h2>CREW Station</h2>
+<div class="card"><div class="grid" id="workers"></div></div>
+<div class="card"><b>Emergency Stop</b><p id="stoptext">Local dashboard controls enabled.</p><button class="red" onclick="toggleStop()">STOP / RESUME</button></div>
+</section>
+<section id="tasks">
+<h2>Mission Control</h2>
+<div class="card"><p>Create an assignment for your future AI workforce.</p><input id="mission" placeholder="Enter a mission"><button class="gold" onclick="addTask()">Create Mission</button></div>
+<div class="card" id="tasklist"></div>
+</section>
+<section id="trends">
+<h2>Trend Intelligence</h2>
+<div class="card"><input id="trend" placeholder="Enter a market trend"><button onclick="addTrend()">Save Trend</button><div id="trendlist"></div></div>
+</section>
+<section id="business">
+<h2>Empire Divisions</h2>
+<div class="grid" id="divisions"></div>
+</section>
+<section id="memory">
+<h2>Memory Vault</h2>
+<div class="card"><p>Your missions and trends are saved in this browser on this device.</p><button onclick="backup()">Export Backup</button><button class="red" onclick="clearAll()">Clear Records</button></div>
+</section>
+<p class="small">Prototype dashboard. No live AI agents, trading, or automatic publishing connected yet.</p>
+<script>
+const roles=['AI Director','Trend Scout','Product Builder','Trading Analyst','Publishing Agent','Motion Studio','Quality Inspector','Operations'];
+const units=['Trend Intelligence','E-commerce','Trading Lab','Publishing House','Motion Studios','Music & Radio','Sourcing','Services'];
+let tasks=JSON.parse(localStorage.getItem('empireTasks')||'[]');
+let trends=JSON.parse(localStorage.getItem('empireTrends')||'[]');
+let stopped=false;
+function show(id){
+document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+function render(){
+document.getElementById('workers').innerHTML=roles.map((r,i)=>'<div class="worker"><b>'+r+'</b><p class="small">Worker '+(i+1)+'</p><span class="good">'+(stopped?'Paused':'Available')+'</span></div>').join('');
+document.getElementById('divisions').innerHTML=units.map(u=>'<div class="card">'+u+'</div>').join('');
+let list=document.getElementById('tasklist');
+list.innerHTML='';
+tasks.forEach((t,i)=>{
+let d=document.createElement('div');
+d.className='item';
+let b=document.createElement('b');b.textContent=t.name;
+let p=document.createElement('p');p.className='small';p.textContent=t.done?'Manually completed':'Awaiting assignment';
+let btn=document.createElement('button');btn.textContent='Mark Complete';btn.disabled=t.done;btn.onclick=()=>completeTask(i);
+d.append(b,p,btn);list.appendChild(d);
+});
+let tl=document.getElementById('trendlist');tl.innerHTML='';
+trends.forEach(t=>{let p=document.createElement('p');p.textContent='• '+t;tl.appendChild(p)});
+document.getElementById('status').textContent=stopped?'PAUSED':'DEMO MODE';
+document.getElementById('stoptext').textContent=stopped?'Local actions paused.':'Local dashboard controls enabled.';
+}
+function save(){
+localStorage.setItem('empireTasks',JSON.stringify(tasks));
+localStorage.setItem('empireTrends',JSON.stringify(trends));
+}
+function addTask(){
+if(stopped)return alert('Dashboard paused');
+let v=document.getElementById('mission').value.trim();
+if(!v)return;
+tasks.push({name:v,done:false});save();
+document.getElementById('mission').value='';render();
+}
+function completeTask(i){
+if(stopped)return alert('Dashboard paused');
+tasks[i].done=true;save();render();
+}
+function addTrend(){
+if(stopped)return alert('Dashboard paused');
+let v=document.getElementById('trend').value.trim();
+if(!v)return;
+trends.push(v);save();
+document.getElementById('trend').value='';render();
+}
+function toggleStop(){stopped=!stopped;render();}
+function backup(){
+let a=document.createElement('a');
+a.href=URL.createObjectURL(new Blob([JSON.stringify({tasks,trends},null,2)],{type:'application/json'}));
+a.download='empire-backup.json';a.click();
+}
+function clearAll(){
+if(confirm('Delete all local missions and trends?')){
+tasks=[];trends=[];save();render();
+}
+}
+render();
+</script>
 </body>
 </html>
