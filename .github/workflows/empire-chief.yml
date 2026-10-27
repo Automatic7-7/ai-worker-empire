@@ -1,0 +1,49 @@
+name: Empire OS - Chief Autonomous Scheduler
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 15 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  chief-daily-operations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chief begins daily operations
+        run: |
+          echo "EMPIRE OS - CHIEF ONLINE"
+          echo "UTC: $(date -u)"
+          echo "Mission 1: Contract opportunity research"
+          echo "Mission 2: Revenue opportunity research"
+          echo "Mission 3: AI services research"
+          echo "Status: Scheduler operational"
+          echo "Research integrations: Not yet connected"
+          echo "Spending authorization: DISABLED"
+          echo "External commitments: DISABLED"
+      - name: Save operations report
+        run: |
+          mkdir -p reports
+          {
+            echo "# Empire OS - Chief Operations Report"
+            echo ""
+            echo "Run time (UTC): $(date -u)"
+            echo ""
+            echo "## Status"
+            echo "- Automated scheduler: Running"
+            echo "- Contract research: Pending integration"
+            echo "- Revenue research: Pending integration"
+            echo "- AI service research: Pending integration"
+            echo "- Spending: Not authorized"
+            echo ""
+            echo "Next milestone: Connect verified opportunity sources."
+          } > reports/chief-report.md
+      - name: Upload operations report
+        uses: actions/upload-artifact@v4
+        with:
+          name: chief-operations-report
+          path: reports/chief-report.md
+          retention-days: 7
