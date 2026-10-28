@@ -1,0 +1,168 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-10-28T20:53:50.390563+00:00",
+  "source": "Local GitHub Actions report-file checks",
+  "research_checks": [
+    {
+      "worker": "Scout",
+      "team": "Research",
+      "file": "scout-report.md",
+      "age_hours": 0.0,
+      "source_links_found": 58,
+      "status": "generated",
+      "severity": "info",
+      "detail": "File present; source accuracy not verified"
+    },
+    {
+      "worker": "Radar",
+      "team": "Research",
+      "file": "radar-report.md",
+      "age_hours": 0.0,
+      "source_links_found": 13,
+      "status": "generated",
+      "severity": "info",
+      "detail": "File present; source accuracy not verified"
+    },
+    {
+      "worker": "Deal Hunter",
+      "team": "Revenue",
+      "file": "deal-hunter-report.md",
+      "age_hours": 0.0,
+      "source_links_found": 0,
+      "status": "needs_source_review",
+      "severity": "medium",
+      "detail": "No web links found; not proof of inaccuracy"
+    },
+    {
+      "worker": "Career Elevator",
+      "team": "Careers",
+      "file": "career-elevator-report.md",
+      "age_hours": 0.0,
+      "source_links_found": 16,
+      "status": "generated",
+      "severity": "info",
+      "detail": "File present; source accuracy not verified"
+    },
+    {
+      "worker": "Grant Hunter",
+      "team": "Grants",
+      "file": "grant-hunter-report.md",
+      "age_hours": 0.0,
+      "source_links_found": 171,
+      "status": "generated",
+      "severity": "info",
+      "detail": "File present; source accuracy not verified"
+    }
+  ],
+  "research_reports_generated": 5,
+  "research_reports_expected": 5,
+  "worker_registry": [
+    {
+      "name": "Scout",
+      "team": "Research",
+      "specialty": "research",
+      "execution_mode": "existing_script"
+    },
+    {
+      "name": "Radar",
+      "team": "Research",
+      "specialty": "monitoring",
+      "execution_mode": "existing_script"
+    },
+    {
+      "name": "Deal Hunter",
+      "team": "Revenue",
+      "specialty": "contracts",
+      "execution_mode": "existing_script"
+    },
+    {
+      "name": "Career Elevator",
+      "team": "Careers",
+      "specialty": "careers",
+      "execution_mode": "existing_script"
+    },
+    {
+      "name": "Grant Hunter",
+      "team": "Grants",
+      "specialty": "grants",
+      "execution_mode": "existing_script"
+    }
+  ],
+  "task_routes": {
+    "research": "Scout",
+    "monitoring": "Radar",
+    "contracts": "Deal Hunter",
+    "careers": "Career Elevator",
+    "grants": "Grant Hunter"
+  },
+  "sample_task_plan": {
+    "id": "demo-grant-review",
+    "specialty": "grants",
+    "description": "Research grant opportunities",
+    "assigned_to": "Grant Hunter",
+    "status": "planned",
+    "execution": "not_started",
+    "max_delegation_depth": 2
+  },
+  "development": {
+    "mode": "proposal-and-review-only",
+    "code_generation_enabled": false,
+    "auto_deployment_enabled": false
+  },
+  "approval_policy": {
+    "sandbox_research": "allowed",
+    "new_code_deployment": "owner",
+    "outreach": "owner",
+    "spending": "owner",
+    "contracts": "owner",
+    "permission_changes": "owner"
+  },
+  "proposals": [
+    {
+      "id": "grant-deadline-checker",
+      "name": "Grant Deadline Checker",
+      "team": "Grants",
+      "risk": "low",
+      "purpose": "Verify grant deadlines and eligibility",
+      "status": "candidate",
+      "automated_tests": "not run",
+      "approval": "not granted"
+    },
+    {
+      "id": "award-opportunity-separator",
+      "name": "Award vs. Opportunity Verifier",
+      "team": "Revenue",
+      "risk": "low",
+      "purpose": "Separate historical awards from active bids",
+      "status": "candidate",
+      "automated_tests": "not run",
+      "approval": "not granted"
+    },
+    {
+      "id": "source-quality-auditor",
+      "name": "Source Quality Auditor",
+      "team": "Monitoring",
+      "risk": "low",
+      "purpose": "Check report freshness and basic source evidence",
+      "status": "candidate",
+      "automated_tests": "not run",
+      "approval": "not granted"
+    },
+    {
+      "id": "career-live-listings",
+      "name": "Career Listings Connector",
+      "team": "Careers",
+      "risk": "medium",
+      "purpose": "Find permitted live paid-training listings",
+      "status": "candidate",
+      "automated_tests": "not run",
+      "approval": "not granted"
+    }
+  ],
+  "limitations": [
+    "File existence and links do not establish source accuracy.",
+    "Task routing is a plan, not autonomous execution.",
+    "Candidate workers are specifications, not implemented bots.",
+    "No AI model or code-generation service is connected."
+  ]
+}
