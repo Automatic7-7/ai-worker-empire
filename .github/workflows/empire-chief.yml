@@ -27,6 +27,9 @@ jobs:
       - name: Empire OS monitors workers and proposes upgrades
         run: python3 empire_engine.py
   
+      - name: AI Architect plans worker improvements
+        run: python3 ai_architect.py
+  
       - name: Chief begins operations
         run: |
           echo "EMPIRE OS - CHIEF ONLINE"
