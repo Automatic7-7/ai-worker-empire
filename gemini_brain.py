@@ -102,12 +102,18 @@ def main():
         )
         print("Gemini analysis report created.")
 
+    
+    except error.HTTPError as exc:
+        print(f"Gemini API HTTP status: {exc.code}")
     except (error.URLError, ValueError, KeyError) as exc:
+
         print(
             "Gemini analysis unavailable: "
             f"{type(exc).__name__}"
         )
 
 
+
 if __name__ == "__main__":
     main()
+
