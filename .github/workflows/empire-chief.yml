@@ -19,7 +19,8 @@ jobs:
 
       - name: Scout researches opportunities
         run: python3 scout.py
-
+      - name: Deal Hunter researches business and careers
+        run: python3 deal_hunter.py
 
       - name: Chief begins operations
         run: |
@@ -55,4 +56,5 @@ jobs:
             reports/chief-report.md
             reports/scout-report.md
             reports/radar-report.md
-
+            reports/deal-hunter-report.md
+            reports/career-elevator-report.md
