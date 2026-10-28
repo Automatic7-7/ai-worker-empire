@@ -64,3 +64,6 @@ jobs:
             reports/deal-hunter-report.md
             reports/career-elevator-report.md
             reports/grant-hunter-report.md
+
+            reports/empire-status.json
+            reports/development-review.md
