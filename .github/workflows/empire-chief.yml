@@ -1,0 +1,44 @@
+name: Empire OS - Chief Autonomous Scheduler
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 15 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  chief-daily-operations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Chief begins operations
+        run: |
+          echo "EMPIRE OS - CHIEF ONLINE"
+          echo "UTC: $(date -u)"
+          echo "Mission 1: Contract opportunities"
+          echo "Mission 2: Revenue opportunities"
+          echo "Mission 3: AI business services"
+          echo "Scheduler test successful"
+          echo "No money spent and no external actions taken"
+
+      - name: Create operations report
+        run: |
+          mkdir -p reports
+          {
+            echo "# Empire OS - Chief Report"
+            echo "Run time: $(date -u)"
+            echo ""
+            echo "Scheduler: Operational"
+            echo "Contract research: Not yet connected"
+            echo "Revenue research: Not yet connected"
+            echo "AI services: Not yet connected"
+            echo "Spending: Disabled"
+          } > reports/chief-report.md
+
+      - name: Save report
+        uses: actions/upload-artifact@v4
+        with:
+          name: chief-operations-report
+          path: reports/chief-report.md
