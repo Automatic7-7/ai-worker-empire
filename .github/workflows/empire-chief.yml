@@ -6,7 +6,7 @@ on:
     - cron: '17 15 * * *'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   chief-daily-operations:
@@ -67,3 +67,17 @@ jobs:
 
             reports/empire-status.json
             reports/development-review.md
+
+
+      - name: Publish dashboard status
+        run: |
+          mkdir -p status
+          cp reports/empire-status.json status/empire-status.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add status/empire-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Empire OS dashboard status"
+            git push
+          fi
+  
