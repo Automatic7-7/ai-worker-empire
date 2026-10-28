@@ -1,0 +1,559 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050d1c">
+<title>Empire OS | Living Command Center</title>
+<style>
+:root{
+  --bg:#050d1c;--panel:#0c1b31;--cyan:#37dfff;
+  --gold:#f2c66d;--text:#eaf6ff;--muted:#91a8c2;
+  --line:#25445d
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--text);
+  font-family:system-ui,-apple-system,sans-serif;
+  background:radial-gradient(ellipse at 50% 0%,#16375c,#050d1c 65%);
+  min-height:100vh
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:17px;border-bottom:1px solid var(--line);
+  background:#071325dd;position:sticky;top:0;z-index:10
+}
+.logo{color:var(--gold);font-weight:900;letter-spacing:2px;font-size:20px}
+.logo small{display:block;color:var(--muted);font-size:9px;letter-spacing:3px}
+.pill{
+  border:1px solid var(--line);border-radius:30px;
+  padding:7px 11px;color:var(--cyan);font-size:11px
+}
+nav{
+  display:flex;gap:8px;overflow-x:auto;padding:12px;
+  border-bottom:1px solid var(--line)
+}
+nav button,.btn{
+  background:#112842;border:1px solid #326181;color:var(--text);
+  border-radius:10px;padding:11px 14px;white-space:nowrap
+}
+nav button.active,.btn.primary{
+  border-color:var(--cyan);color:var(--cyan);
+  box-shadow:0 0 14px #20cfff33
+}
+main{max-width:1200px;margin:auto;padding:16px}
+section{display:none}
+section.active{display:block}
+.panel{
+  background:linear-gradient(145deg,#10233b,#081528);
+  border:1px solid var(--line);border-radius:17px;
+  padding:18px;margin-bottom:15px;
+  box-shadow:0 10px 30px #0004
+}
+h1,h2,h3{margin:0 0 12px}
+h1{font-size:26px}
+h2{font-size:19px;color:var(--gold)}
+h3{font-size:15px}
+p{line-height:1.55;color:var(--muted)}
+.muted,small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat{text-align:center;padding:15px}
+.stat strong{display:block;font-size:27px;color:var(--cyan)}
+.stat span{font-size:11px;color:var(--muted)}
+.hero{text-align:center;overflow:hidden;position:relative}
+.hero:before{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,transparent 0 17px,#40dfff08 18px 19px);
+  pointer-events:none
+}
+.hologram{
+  position:relative;width:225px;height:295px;
+  margin:16px auto 5px;filter:drop-shadow(0 0 19px #00cfff99)
+}
+.halo{
+  position:absolute;top:0;left:38px;width:150px;height:150px;
+  border:1px solid #55eaff;border-radius:50%;
+  box-shadow:0 0 25px #24dfff55,inset 0 0 30px #24dfff33;
+  animation:pulse 3s infinite
+}
+.head{
+  position:absolute;top:40px;left:81px;width:64px;height:84px;
+  border-radius:45% 45% 42% 42%;
+  background:linear-gradient(90deg,#176b99,#70eaff,#176b99);
+  box-shadow:0 0 20px #30dfff;
+  z-index:2
+}
+.hair{
+  position:absolute;top:31px;left:78px;width:70px;height:35px;
+  border-radius:50% 50% 20% 20%;background:#102c50;z-index:3;
+  border-top:3px solid var(--cyan)
+}
+.eyes{
+  position:absolute;top:80px;left:92px;width:42px;height:7px;
+  border-radius:12px;background:#041b36;
+  box-shadow:0 0 12px #ffffff;z-index:4
+}
+.bodyshape{
+  position:absolute;top:126px;left:30px;width:165px;height:155px;
+  clip-path:polygon(30% 0,70% 0,100% 25%,89% 100%,11% 100%,0 25%);
+  background:linear-gradient(90deg,#0d426c,#2dd8ff88,#0d426c);
+  border:1px solid var(--cyan)
+}
+.core{
+  position:absolute;top:170px;left:100px;width:26px;height:26px;
+  background:var(--gold);border-radius:50%;
+  box-shadow:0 0 20px var(--gold);z-index:4
+}
+.platform{
+  position:absolute;bottom:0;left:10px;width:205px;height:32px;
+  border:3px solid var(--cyan);border-radius:50%;
+  box-shadow:0 0 24px var(--cyan),inset 0 0 16px var(--cyan)
+}
+@keyframes pulse{50%{transform:scale(1.06);opacity:.65}}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important}
+}
+.speech{
+  background:#09223b;border:1px solid #3588ae;
+  border-radius:14px;padding:14px;text-align:left;
+  position:relative;z-index:1
+}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{flex:1}
+.worker{
+  padding:15px;border:1px solid var(--line);
+  border-radius:12px;background:#09182a
+}
+.worker .symbol{font-size:25px}
+.worker small{display:block;margin-top:5px}
+.tag{
+  display:inline-block;color:var(--gold);font-size:11px;
+  border:1px solid #7e6739;border-radius:20px;
+  padding:4px 8px;margin-top:9px
+}
+label{display:block;color:var(--muted);margin:12px 0 6px}
+input,select{
+  width:100%;padding:12px;background:#07172a;
+  color:white;border:1px solid #326181;border-radius:9px
+}
+.full{width:100%;margin-top:12px}
+.notice{
+  border-left:3px solid var(--gold);
+  padding:11px;background:#f2c66d0b;
+  color:#d8caa6;font-size:13px;line-height:1.5
+}
+a{color:var(--cyan)}
+.log{
+  font-family:monospace;font-size:12px;white-space:pre-wrap;
+  background:#04101e;padding:12px;border-radius:10px;
+  color:#b2eaff;max-height:250px;overflow:auto
+}
+footer{
+  text-align:center;color:var(--muted);
+  font-size:11px;padding:25px
+}
+@media(min-width:760px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .layout{display:grid;grid-template-columns:1.1fr 1fr;gap:15px}
+  h1{font-size:34px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">♛ EMPIRE OS
+    <small>LIVING COMMAND CENTER</small>
+  </div>
+  <span class="pill">◉ COMMAND INTERFACE</span>
+</header>
+
+<nav aria-label="Main navigation">
+  <button class="active" onclick="show('home',this)">⌂ Command</button>
+  <button onclick="show('workers',this)">◈ Workers</button>
+  <button onclick="show('monitor',this)">◎ Monitor</button>
+  <button onclick="show('ventures',this)">✦ Ventures</button>
+  <button onclick="show('members',this)">♧ Members</button>
+  <button onclick="show('settings',this)">⚙ Chief</button>
+</nav>
+
+<main>
+<section id="home" class="active">
+  <h1>Empire Headquarters</h1>
+  <p>Your AI workforce, opportunity research and future business ecosystem.</p>
+
+  <div class="layout">
+    <div class="panel hero">
+      <div class="hologram" aria-label="Stylized holographic Chief">
+        <div class="halo"></div>
+        <div class="hair"></div>
+        <div class="head"></div>
+        <div class="eyes"></div>
+        <div class="bodyshape"></div>
+        <div class="core"></div>
+        <div class="platform"></div>
+      </div>
+      <h2 id="chiefName">CHIEF</h2>
+      <div class="speech" id="chiefSpeech">
+        Welcome to Empire OS. I can guide you through
+        the command center and explain your worker teams.
+      </div>
+      <div class="actions">
+        <button class="btn primary" onclick="chiefTalk()">Talk to Chief</button>
+        <button class="btn" onclick="speak()">🔊 Speak</button>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="navigate('workers')">AI Workers</button>
+        <button class="btn" onclick="navigate('monitor')">System Monitor</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="grid">
+        <div class="panel stat">
+          <strong>6</strong><span>Reporting functions configured</span>
+        </div>
+        <div class="panel stat">
+          <strong>1</strong><span>GitHub workflow configured</span>
+        </div>
+        <div class="panel stat">
+          <strong id="proposalCount">0</strong>
+          <span>Local venture proposals</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>System Overview</h2>
+        <p>Chief coordinates research from Scout, Radar,
+        Deal Hunter, Grant Hunter and Career Elevator.</p>
+        <div class="notice">
+          Live health and report metrics are not connected
+          to this website yet. Use GitHub Actions to verify
+          actual workflow status.
+        </div>
+        <div class="actions">
+          <a class="btn" id="actionsLink" target="_blank"
+             rel="noopener">Open GitHub Actions ↗</a>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Mission</h2>
+        <p>Discover legitimate business opportunities,
+        grants, careers and services. Build new workers,
+        evaluate results and grow through approved ventures.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workers">
+  <h1>AI Worker Headquarters</h1>
+  <p>Current research functions and planned expansion teams.</p>
+  <div class="grid" id="workerGrid"></div>
+  <div class="panel">
+    <h2>Team Delegation</h2>
+    <p>Future team leads will propose specialist teams,
+    assign permitted research tasks and send results to Chief.</p>
+    <div class="notice">
+      Automatic worker creation and delegation are not
+      connected yet. Production code changes will require approval.
+    </div>
+  </div>
+</section>
+
+<section id="monitor">
+  <h1>Empire Operations Center</h1>
+  <div class="panel">
+    <h2>Monitoring Division</h2>
+    <div class="grid" id="monitorGrid"></div>
+  </div>
+  <div class="panel">
+    <h2>Actual Workflow Status</h2>
+    <p>Check the GitHub Actions page for successful runs,
+    failures, execution logs and downloadable reports.</p>
+    <a class="btn primary" id="monitorLink" target="_blank"
+       rel="noopener">View Actual Runs ↗</a>
+  </div>
+  <div class="panel">
+    <h2>Local Interface Log</h2>
+    <div class="log" id="log">Command center loaded.</div>
+    <button class="btn full" onclick="refreshLog()">Refresh display</button>
+  </div>
+</section>
+
+<section id="ventures">
+  <h1>Empire Ventures</h1>
+  <p>Design and evaluate new revenue services and AI worker teams.</p>
+  <div class="panel">
+    <h2>Propose a Venture</h2>
+    <label for="ventureName">Business or worker idea</label>
+    <input id="ventureName"
+      placeholder="Example: Local Construction Lead Finder">
+    <label for="ventureType">Category</label>
+    <select id="ventureType">
+      <option>Business service</option>
+      <option>New AI worker</option>
+      <option>Member marketplace service</option>
+      <option>Opportunity research team</option>
+    </select>
+    <label for="ventureValue">How could it create value?</label>
+    <input id="ventureValue"
+      placeholder="Example: Match contractors with qualified leads">
+    <button class="btn primary full" onclick="addVenture()">
+      Save Proposal
+    </button>
+  </div>
+  <div class="panel">
+    <h2>Venture Proposal Board</h2>
+    <div id="ventureList"></div>
+    <p><small>Proposals are saved only in this browser.
+    Saving a proposal does not deploy a worker or generate revenue.</small></p>
+  </div>
+</section>
+
+<section id="members">
+  <h1>Empire Member Economy</h1>
+  <div class="panel">
+    <h2>Future Membership Plans</h2>
+    <div class="grid">
+      <div class="worker">
+        <h3>Explorer</h3><h2>Free</h2>
+        <p>Basic opportunity discovery.</p>
+      </div>
+      <div class="worker">
+        <h3>Starter</h3><h2>$4.99/mo</h2>
+        <p>More research and saved opportunities.</p>
+      </div>
+      <div class="worker">
+        <h3>Builder</h3><h2>$9.99/mo</h2>
+        <p>Business workspace and advanced tools.</p>
+      </div>
+      <div class="worker">
+        <h3>Operator</h3><h2>$19.99/mo</h2>
+        <p>Higher usage and team capabilities.</p>
+      </div>
+    </div>
+  </div>
+  <div class="notice">
+    These are proposed membership plans, not active products.
+    No payments or member accounts are enabled. Secure billing
+    and individual workspaces require a backend.
+  </div>
+</section>
+
+<section id="settings">
+  <h1>Customize Your Chief</h1>
+  <div class="panel">
+    <h2>Holographic Identity</h2>
+    <label for="nameInput">Assistant name</label>
+    <input id="nameInput" value="Chief" maxlength="30">
+    <label for="personality">Communication style</label>
+    <select id="personality">
+      <option value="strategic">Strategic and professional</option>
+      <option value="friendly">Friendly and encouraging</option>
+      <option value="direct">Direct and efficient</option>
+    </select>
+    <label for="voiceToggle">Voice output</label>
+    <select id="voiceToggle">
+      <option value="off">Off</option>
+      <option value="on">On when Speak is tapped</option>
+    </select>
+    <button class="btn primary full" onclick="saveChief()">
+      Save Chief Settings
+    </button>
+  </div>
+  <div class="panel">
+    <h2>Future Avatar Studio</h2>
+    <p>Choose a realistic human appearance, clothing,
+    holographic effects, voice and animation.</p>
+    <div class="notice">
+      This first version uses a lightweight animated
+      hologram. Photorealistic 3D avatars and AI conversation
+      are future integrations.
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  EMPIRE OS • OWNER-CONTROLLED AI WORKFORCE<br>
+  Research automation and command interface
+</footer>
+
+<script>
+const repo = "Automatic7-7/ai-worker-empire";
+const actionsUrl =
+  "https://github.com/" + repo + "/actions/workflows/empire-chief.yml";
+
+document.getElementById("actionsLink").href = actionsUrl;
+document.getElementById("monitorLink").href = actionsUrl;
+
+const workers = [
+  ["♛","Chief","Operations coordination","Configured"],
+  ["◉","Scout","Industry research","Configured"],
+  ["◇","Radar","Research signal investigation","Configured"],
+  ["▣","Deal Hunter","Federal award research","Configured"],
+  ["✦","Grant Hunter","Federal grant searches","Configured"],
+  ["♧","Career Elevator","Career pathway profiles","Configured"],
+  ["⬡","Architect","Propose new AI workers","Planned"],
+  ["⚙","Auditor","Review worker performance","Planned"],
+  ["◈","Memory Keeper","Shared verified knowledge","Planned"],
+  ["↗","Revenue Strategist","Evaluate business models","Planned"]
+];
+
+const monitors = [
+  ["System Watch","Workflow failures and report delivery"],
+  ["Intelligence Watch","Source accuracy and outdated leads"],
+  ["Revenue Watch","Verified earnings and costs"],
+  ["Security Watch","Permissions and sensitive information"],
+  ["Member Watch","Service and account quality"],
+  ["Expansion Watch","New worker and team proposals"]
+];
+
+function renderCards(items,target){
+  document.getElementById(target).innerHTML =
+    items.map(item =>
+      '<div class="worker"><div class="symbol">' +
+      escapeHtml(item[0]) + '</div><h3>' +
+      escapeHtml(item[1]) + '</h3><small>' +
+      escapeHtml(item[2]) + '</small><span class="tag">' +
+      escapeHtml(item[3] || "Planned") +
+      '</span></div>'
+    ).join("");
+}
+
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+renderCards(workers,"workerGrid");
+renderCards(monitors.map(x=>["◎",x[0],x[1],"Planned"]),"monitorGrid");
+
+function show(id,button){
+  document.querySelectorAll("section").forEach(s=>
+    s.classList.toggle("active",s.id===id)
+  );
+  document.querySelectorAll("nav button").forEach(b=>
+    b.classList.toggle("active",b===button)
+  );
+  window.scrollTo(0,0);
+}
+
+function navigate(id){
+  const button = [...document.querySelectorAll("nav button")]
+    .find(b=>b.getAttribute("onclick").includes("'"+id+"'"));
+  show(id,button);
+}
+
+function chiefTalk(){
+  const style=localStorage.getItem("empireChiefStyle")||"strategic";
+  const messages={
+    strategic:"Our priority is verified opportunities, reliable workers and measurable revenue. Choose Workers or Monitor to explore the system.",
+    friendly:"Welcome back! Your Empire OS workspace is ready. We can explore workers, monitoring or your next business idea.",
+    direct:"Command interface ready. Select Workers, Monitor or Ventures. Live AI conversation is not connected."
+  };
+  document.getElementById("chiefSpeech").textContent=messages[style];
+}
+
+function speak(){
+  if(localStorage.getItem("empireChiefVoice")!=="on"){
+    alert("Enable voice in Chief settings first.");
+    return;
+  }
+  if(!("speechSynthesis" in window)){
+    alert("Speech is not supported by this browser.");
+    return;
+  }
+  speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(
+    document.getElementById("chiefSpeech").textContent
+  );
+  utterance.rate=0.95;
+  speechSynthesis.speak(utterance);
+}
+
+function saveChief(){
+  const name=document.getElementById("nameInput").value.trim()||"Chief";
+  localStorage.setItem("empireChiefName",name);
+  localStorage.setItem("empireChiefStyle",
+    document.getElementById("personality").value);
+  localStorage.setItem("empireChiefVoice",
+    document.getElementById("voiceToggle").value);
+  document.getElementById("chiefName").textContent=name.toUpperCase();
+  alert("Chief settings saved on this device.");
+}
+
+let ventures=[];
+try{
+  ventures=JSON.parse(localStorage.getItem("empireVentures")||"[]");
+  if(!Array.isArray(ventures))ventures=[];
+}catch(e){ventures=[];}
+
+function addVenture(){
+  const name=document.getElementById("ventureName").value.trim();
+  const value=document.getElementById("ventureValue").value.trim();
+  if(!name||!value){
+    alert("Enter an idea and how it creates value.");
+    return;
+  }
+  ventures.unshift({
+    name:name,
+    type:document.getElementById("ventureType").value,
+    value:value,
+    date:new Date().toLocaleDateString()
+  });
+  localStorage.setItem("empireVentures",JSON.stringify(ventures));
+  document.getElementById("ventureName").value="";
+  document.getElementById("ventureValue").value="";
+  renderVentures();
+}
+
+function renderVentures(){
+  document.getElementById("proposalCount").textContent=ventures.length;
+  const target=document.getElementById("ventureList");
+  target.innerHTML=ventures.length?ventures.map((v,i)=>
+    '<div class="worker" style="margin-bottom:10px"><h3>'+
+    escapeHtml(v.name)+'</h3><small>'+
+    escapeHtml(v.type)+" • "+escapeHtml(v.date)+
+    '</small><p>'+escapeHtml(v.value)+
+    '</p><span class="tag">Proposal only</span> '+
+    '<button class="btn" onclick="removeVenture('+i+')">Remove</button>'+
+    '</div>'
+  ).join(""):"<p>No venture proposals saved yet.</p>";
+}
+
+function removeVenture(i){
+  if(!confirm("Remove this local proposal?"))return;
+  ventures.splice(i,1);
+  localStorage.setItem("empireVentures",JSON.stringify(ventures));
+  renderVentures();
+}
+
+function refreshLog(){
+  document.getElementById("log").textContent=
+    "Interface check: OK\n"+
+    "Time: "+new Date().toLocaleString()+"\n"+
+    "Local venture proposals: "+ventures.length+"\n"+
+    "GitHub workflow status: Not connected to this page\n"+
+    "Live AI monitoring: Not connected";
+}
+
+document.getElementById("chiefName").textContent=
+  (localStorage.getItem("empireChiefName")||"Chief").toUpperCase();
+document.getElementById("nameInput").value=
+  localStorage.getItem("empireChiefName")||"Chief";
+document.getElementById("personality").value=
+  localStorage.getItem("empireChiefStyle")||"strategic";
+document.getElementById("voiceToggle").value=
+  localStorage.getItem("empireChiefVoice")||"off";
+
+renderVentures();
+refreshLog();
+</script>
+</body>
+</html>
