@@ -303,3 +303,142 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ===== EMPIRE OS: GRANT HUNTER 3.0 =====
+
+from urllib.parse import quote
+
+GRANT_SEARCHES = [
+    "small business",
+    "workforce development",
+    "apprenticeship",
+    "transportation",
+    "construction",
+    "healthcare",
+    "technology",
+    "community development",
+    "education",
+    "rural development",
+    "entrepreneurship"
+]
+
+def research_live_grants():
+    lines = [
+        "# Empire OS - Grant Hunter",
+        "",
+        "Source: Official Grants.gov search API",
+        "Status: Posted or forecasted federal opportunities",
+        "",
+        "A posted listing is not proof of individual eligibility.",
+        "Forecasted opportunities are not yet open.",
+        "Deadlines and terms must be confirmed with the funder.",
+        ""
+    ]
+
+    seen = set()
+    errors = 0
+    posted = 0
+    forecasted = 0
+
+    for keyword in GRANT_SEARCHES:
+        payload = {
+            "rows": 20,
+            "keyword": keyword,
+            "oppStatuses": "posted|forecasted"
+        }
+
+        result, error = request_json(
+            "https://api.grants.gov/v1/api/search2",
+            payload
+        )
+
+        if error:
+            errors += 1
+            lines.append(
+                f"- Search error for {keyword}: {error}"
+            )
+            continue
+
+        if result.get("errorcode") != 0:
+            errors += 1
+            lines.append(
+                f"- API error for {keyword}: "
+                f"{result.get('msg', 'Unknown')}"
+            )
+            continue
+
+        hits = (result.get("data") or {}).get("oppHits") or []
+
+        for grant in hits:
+            grant_id = grant.get("id")
+            if not grant_id or grant_id in seen:
+                continue
+
+            seen.add(grant_id)
+
+            status = str(
+                grant.get("oppStatus") or "unknown"
+            ).lower()
+
+            if status == "posted":
+                posted += 1
+            elif status == "forecasted":
+                forecasted += 1
+            else:
+                continue
+
+            title = grant.get("title") or "Untitled"
+            number = grant.get("number") or "Unknown"
+            agency = grant.get("agencyName") or "Unknown"
+            close_date = grant.get("closeDate") or "Not listed"
+
+            link = (
+                "https://www.grants.gov/search-results-detail/"
+                + quote(str(grant_id))
+            )
+
+            lines.extend([
+                f"## {title}",
+                f"- Opportunity number: {number}",
+                f"- Agency: {agency}",
+                f"- Status: {status}",
+                f"- Listed closing date: {close_date}",
+                f"- Official listing: {link}",
+                "- Funding amount: Verify on official listing",
+                "- Eligibility: Not yet verified",
+                "- Applicant credit requirements: Not yet verified",
+                "- Classification: Federal grant lead",
+                ""
+            ])
+
+    lines.extend([
+        "## Search summary",
+        f"- Unique opportunities: {posted + forecasted}",
+        f"- Posted: {posted}",
+        f"- Forecasted: {forecasted}",
+        f"- Search errors: {errors}",
+        "",
+        "## Future discovery sources",
+        "- State and municipal grant portals",
+        "- Community foundations",
+        "- Private charitable foundations",
+        "- Employer workforce-training funds",
+        "- Local business competitions",
+        "",
+        "These additional sources are not yet automated.",
+        "Do not claim eligibility or submit applications",
+        "without applicant approval."
+    ])
+
+    (REPORTS / "grant-hunter-report.md").write_text(
+        "\n".join(lines), encoding="utf-8"
+    )
+
+    print(
+        f"Grant Hunter: {posted} posted, "
+        f"{forecasted} forecasted, {errors} errors"
+    )
+
+
+# Run Grant Hunter when this program executes.
+research_live_grants()
