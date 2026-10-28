@@ -103,8 +103,18 @@ def main():
         print("Gemini analysis report created.")
 
     
+    
+    
     except error.HTTPError as exc:
         print(f"Gemini API HTTP status: {exc.code}")
+        try:
+            details = json.loads(exc.read().decode("utf-8"))
+            issue = details.get("error", {})
+            print("Gemini error type:", issue.get("status", "unknown"))
+            print("Gemini error message:", str(issue.get("message", "unknown"))[:300])
+        except (ValueError, UnicodeError):
+            print("Gemini returned unreadable error details.")
+
     except (error.URLError, ValueError, KeyError) as exc:
 
         print(
