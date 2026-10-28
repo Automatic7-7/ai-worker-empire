@@ -16,6 +16,8 @@ jobs:
     
       - name: Get Empire OS files
         uses: actions/checkout@v4
+      - name: Test Empire OS development engine
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
 
       - name: Scout researches opportunities
         run: python3 scout.py
