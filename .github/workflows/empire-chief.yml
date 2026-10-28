@@ -30,6 +30,12 @@ jobs:
       - name: AI Architect plans worker improvements
         run: python3 ai_architect.py
   
+      - name: Gemini Brain analyzes Empire OS
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 gemini_brain.py
+
       - name: Chief begins operations
         run: |
           echo "EMPIRE OS - CHIEF ONLINE"
@@ -71,7 +77,7 @@ jobs:
             reports/empire-status.json
             reports/development-review.md
             reports/architect-plan.json
-
+            reports/gemini-analysis.json
       - name: Publish dashboard status
         run: |
           mkdir -p status
