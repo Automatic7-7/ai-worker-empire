@@ -13,6 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+    
+      - name: Get Empire OS files
+        uses: actions/checkout@v4
+
+      - name: Scout researches opportunities
+        run: python3 scout.py
+
+
       - name: Chief begins operations
         run: |
           echo "EMPIRE OS - CHIEF ONLINE"
@@ -41,4 +49,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: chief-operations-report
-          path: reports/chief-report.md
+          
+          path: |
+            reports/chief-report.md
+            reports/scout-report.md
+
