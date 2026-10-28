@@ -70,7 +70,7 @@ jobs:
 
             reports/empire-status.json
             reports/development-review.md
-
+            reports/architect-plan.json
 
       - name: Publish dashboard status
         run: |
