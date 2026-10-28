@@ -9,7 +9,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-STATUS = Path("status/empire-status.json")
+STATUS = Path("reports/empire-status.json")
 OUTPUT = Path("reports/architect-plan.json")
 
 
