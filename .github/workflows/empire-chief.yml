@@ -50,7 +50,9 @@ jobs:
         with:
           name: chief-operations-report
           
+          
           path: |
             reports/chief-report.md
             reports/scout-report.md
+            reports/radar-report.md
 
