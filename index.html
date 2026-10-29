@@ -15,6 +15,39 @@
 <div class="section-head"><h2>Monitoring &amp; delegation</h2><span class="tag">HUMAN APPROVAL REQUIRED</span></div><div class="columns"><section class="panel"><div class="eyebrow">Monitor desk</div><h3>Research quality alerts</h3><div id="alerts" class="log">No report loaded. A successful workflow run does not prove source accuracy.</div><h3>Operational safeguards</h3><div id="safeguards" style="font-size:13px;color:var(--muted)">Spending, outreach, contracts, code deployment, and permission changes require owner approval.</div></section><section class="panel"><div class="eyebrow">Expansion desk</div><h3>Proposed subteams &amp; workers</h3><div id="proposals">No proposals loaded.</div><p style="color:var(--muted);font-size:12px">Proposals are specifications, not functioning agents. The Chief cannot deploy them from this page.</p></section></div>
 <div class="section-head"><h2>System transparency</h2></div><section class="panel"><div class="eyebrow">Source &amp; execution boundaries</div><p id="sourceDetails" style="color:var(--muted)">This site does not have access to private GitHub Actions artifacts. To enable automatic updates, publish a reviewed, non-sensitive status JSON file at <code>reports/empire-status.json</code> on the GitHub Pages branch.</p><div class="log" id="development">AI model connection: not verified. Delegation is not autonomous execution. No actions are performed by this dashboard.</div></section>
 <footer class="footer">EMPIRE OS • Owner-governed AI worker architecture • Research is not a guarantee of accuracy, eligibility, or income</footer>
+
+<section id="pixel-hq" aria-label="Empire OS Pixel Headquarters" style="margin:24px 0;padding:16px;background:#0b172b;border:1px solid #29d9e8;border-radius:14px">
+  <h2 style="color:#65efff">🏙️ EMPIRE OS — PIXEL HQ</h2>
+  <p style="color:#a9bed3">Your AI worker headquarters</p>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+    <div style="background:#122b40;padding:14px;text-align:center;border:2px solid #38d9e6;border-radius:6px">
+      <div style="font-size:36px">👑</div>
+      <strong>AI CHIEF</strong>
+      <div style="font-size:12px;color:#8bdce8">Command Center</div>
+    </div>
+    <div style="background:#122b40;padding:14px;text-align:center;border:2px solid #38d9e6;border-radius:6px">
+      <div style="font-size:36px">🔎</div>
+      <strong>SCOUT</strong>
+      <div style="font-size:12px;color:#8bdce8">Research Station</div>
+    </div>
+    <div style="background:#122b40;padding:14px;text-align:center;border:2px solid #38d9e6;border-radius:6px">
+      <div style="font-size:36px">💼</div>
+      <strong>DEAL HUNTER</strong>
+      <div style="font-size:12px;color:#8bdce8">Opportunity Center</div>
+    </div>
+    <div style="background:#122b40;padding:14px;text-align:center;border:2px solid #38d9e6;border-radius:6px">
+      <div style="font-size:36px">🛠️</div>
+      <strong>AI ARCHITECT</strong>
+      <div style="font-size:12px;color:#8bdce8">Development Lab</div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:#8da6ba;margin-top:14px">
+    VISUAL PREVIEW • Live worker activity coming next
+  </p>
+</section>
+
 </main>
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id);const safe=(v,f='—')=>v===undefined||v===null?f:String(v);let current=null;const setText=(id,v)=>$(id).textContent=v;const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n};function render(data,source){if(!data||typeof data!=='object'||Array.isArray(data)||!Array.isArray(data.worker_registry)||!Array.isArray(data.research_checks))throw Error('Status JSON must contain worker_registry and research_checks arrays.');current=data;const checks=data.research_checks;const workers=data.worker_registry;const proposals=Array.isArray(data.proposals)?data.proposals:[];const flagged=checks.filter(c=>c.status!=='generated'||(c.severity&& !['info','none'].includes(c.severity)));setText('reports',safe(data.research_reports_generated,checks.length)+' / '+safe(data.research_reports_expected,checks.length));setText('reportsNote','File generation, not accuracy');setText('workersCount',workers.length);setText('proposalsCount',proposals.length);setText('reviewCount',flagged.length);setText('sourceBadge',source);const date=data.generated_at?new Date(data.generated_at):null;const validDate=date&&!Number.isNaN(date.getTime());setText('chiefMessage',flagged.length?'Chief: '+flagged.length+' research check(s) require attention. Review source evidence before acting.':'Chief: Report loaded. Source accuracy still requires independent verification.');const roster=$('workers');roster.replaceChildren();workers.forEach(w=>{const c=checks.find(x=>x.worker===w.name);const card=el('article','panel worker');card.append(el('div','eyebrow',safe(w.team,'Division')),el('h3','',safe(w.name)),el('p','',safe(w.specialty,'Assigned worker')));const m=el('div','meta');m.append(el('span','',safe(w.execution_mode,'Unverified mode')),el('span',c&&c.status==='generated'?'ok':'attention',c?safe(c.status).replaceAll('_',' '):'No check'));card.append(m);roster.append(card)});const alerts=$('alerts');alerts.replaceChildren();if(!flagged.length)alerts.textContent='No flagged checks in this report. This does not establish source accuracy.';flagged.forEach(c=>alerts.append(el('div','',safe(c.worker)+': '+safe(c.detail,c.status)+'\n')));const ps=$('proposals');ps.replaceChildren();if(!proposals.length)ps.textContent='No proposals recorded.';proposals.forEach(p=>{const row=el('div','proposal'),body=el('div');body.append(el('strong','',safe(p.name)),el('small','',safe(p.team)+' • '+safe(p.purpose)),el('small','', 'Tests: '+safe(p.automated_tests)+' • Approval: '+safe(p.approval)));row.append(body,el('span','pill',safe(p.status,'candidate')));ps.append(row)});const policy=data.approval_policy||{};setText('safeguards',Object.entries(policy).map(([k,v])=>k.replaceAll('_',' ')+': '+v).join(' • ')||'Approval policy not supplied');const dev=data.development||{};setText('development','Development mode: '+safe(dev.mode,'not reported')+'\nCode generation enabled: '+safe(dev.code_generation_enabled,'not reported')+'\nAuto deployment enabled: '+safe(dev.auto_deployment_enabled,'not reported')+'\nDelegation: planned task routes only; no autonomous execution verified.');setText('sourceDetails','Source: '+source+'. '+(validDate?'Generated '+date.toLocaleString()+'. ':'Timestamp unavailable. ')+'Checks inspect local report files; links and file existence do not prove accuracy.');}
