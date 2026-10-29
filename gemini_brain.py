@@ -13,7 +13,9 @@ from urllib import error, request
 
 STATUS = Path("reports/empire-status.json")
 OUTPUT = Path("reports/gemini-analysis.json")
-MODEL = "gemini-2.5-flash"
+
+MODEL = "gemini-3.8-flash"
+
 API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/"
     f"models/{MODEL}:generateContent"
