@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-31T15:46:31.548971+00:00",
+  "generated_at": "2026-11-01T15:44:09.301750+00:00",
   "source": "Local GitHub Actions report-file checks",
   "research_checks": [
     {
@@ -48,7 +48,7 @@
       "team": "Grants",
       "file": "grant-hunter-report.md",
       "age_hours": 0.0,
-      "source_links_found": 172,
+      "source_links_found": 171,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
