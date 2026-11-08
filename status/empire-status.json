@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-07T15:47:50.301088+00:00",
+  "generated_at": "2026-11-08T15:47:27.745099+00:00",
   "source": "Local GitHub Actions report-file checks",
   "research_checks": [
     {
@@ -8,7 +8,7 @@
       "team": "Research",
       "file": "scout-report.md",
       "age_hours": 0.0,
-      "source_links_found": 53,
+      "source_links_found": 48,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
@@ -18,7 +18,7 @@
       "team": "Research",
       "file": "radar-report.md",
       "age_hours": 0.0,
-      "source_links_found": 17,
+      "source_links_found": 15,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
