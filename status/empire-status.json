@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25T16:20:50.949251+00:00",
+  "generated_at": "2026-11-26T16:17:45.471310+00:00",
   "source": "Local GitHub Actions report-file checks",
   "research_checks": [
     {
@@ -8,7 +8,7 @@
       "team": "Research",
       "file": "scout-report.md",
       "age_hours": 0.0,
-      "source_links_found": 56,
+      "source_links_found": 60,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
@@ -18,7 +18,7 @@
       "team": "Research",
       "file": "radar-report.md",
       "age_hours": 0.0,
-      "source_links_found": 20,
+      "source_links_found": 25,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
@@ -48,7 +48,7 @@
       "team": "Grants",
       "file": "grant-hunter-report.md",
       "age_hours": 0.0,
-      "source_links_found": 168,
+      "source_links_found": 169,
       "status": "generated",
       "severity": "info",
       "detail": "File present; source accuracy not verified"
